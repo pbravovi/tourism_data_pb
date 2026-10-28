@@ -1,0 +1,101 @@
+---
+title: "tourism_data_pbv"
+author: "peter_bravo"
+date: "2026-10-28"
+description: "Overview of International Data in Tourism using UN Tourism Data
+Based on UN Tourism data our aim is to analyze international data in Tourism"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+## Section 1 Introduction to Tourism Data
+
+library(tidyverse)
+library(here)
+library(readxl)
+
+#Here we will be exploring international tourism data from UN Tourism, here we can see a table with definitions of main variables 
+## first i read the source file
+tourism_data <- read_xlsx("data/raw/1._UN_Tourism_domestic_trips_12_2025.xlsx")
+names(tourism_data)
+
+tourism_domestic <- tourism_data |>
+  select(indicator_code, reporter_area_label, year, value, flag)
+
+tourism_domestic <- tourism_domestic |>
+  rename(
+    indicator        = indicator_code,
+    country          = reporter_area_label,
+    trips_thousands  = value
+  )
+names(tourism_domestic)
+
+tourism_domestic <- tourism_domestic |>
+  mutate(
+    indicator = case_when(
+      indicator == "DOMC_TRIP_TOTL_TOTL_VSTR" ~ "visitors",
+      indicator == "DOMC_TRIP_TOTL_TOTL_TOUR" ~ "tourists",
+      indicator == "DOMC_TRIP_TOTL_TOTL_EXCR" ~ "excursionists"
+    ))
+## now i am editing names of countries
+tourism_domestic <- tourism_domestic |>
+  mutate(
+    country = case_when(
+      country == "United Kingdom of Great Britain and Northern Ireland" ~ "United Kingdom",
+      country == "United States of America"           ~ "United States",
+      country == "Netherlands (Kingdom of the)"       ~ "Netherlands",
+      country == "Iran (Islamic Republic of)"         ~ "Iran",
+      country == "Venezuela (Bolivarian Republic of)" ~ "Venezuela",
+      country == "Republic of Korea"                  ~ "South Korea",
+      country == "Republic of Moldova"                ~ "Moldova",
+      country == "United Republic of Tanzania"        ~ "Tanzania",
+      country == "Lao People's Democratic Republic"   ~ "Laos",
+      country == "Democratic Republic of the Congo"   ~ "Congo",
+      country == "Viet Nam"                           ~ "Vietnam",
+      country == "Taiwan Province of China"                           ~ "Taiwan",
+      country == "Côte d’Ivoire"                           ~ "Cote d Ivoire",
+      TRUE ~ country  
+    )                   
+  )                     
+#after cleaning the table i exported as a csv file
+write_csv(tourism_domestic, here("data", "raw", "tourism_domestic.csv"))
+sort(unique(tourism_domestic$country))
+View(tourism_domestic$country)
+tourism_domestic %>% distinct(country) %>% View()
+```
+
+```{r}
+## Section 2
+```
+
+```{r}
+## Section 3
+```
+
+```{r}
+## Section 4
+```
+
+```{r}
+## Section 5
+```
+
+
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
