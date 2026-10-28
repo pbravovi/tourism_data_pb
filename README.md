@@ -11,3 +11,4 @@ accomodation
 macroeconomic
 employment
 sdgs
+if you need more information please to check some definitions please visit https://www.untourism.int/glossary-tourism-terms or https://unstats.un.org/unsd/publication/Seriesm/SeriesM_83rev1e.pdf#page=1
